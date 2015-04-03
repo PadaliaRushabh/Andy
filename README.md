@@ -9,6 +9,7 @@ Syntax :
 
 [upcoming] 
 >python andy.py -n <keystore-name> #Generate user based keystore name
+
 >python andy.py -a <apk-path> #Sign the apk using above created keystore
 
 This will save lot of time for security person. 
