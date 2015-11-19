@@ -14,7 +14,6 @@ import config
 
 class SignApp:
 	def __init__(self):
-		self.keystore_name = config.keystore_name
 		self.alias = config.alias
 		self.pwd = config.pwd # Password can be changed here.
 		self.name = config.name
@@ -24,6 +23,8 @@ class SignApp:
 		self.state = config.state
 		self.country_code = config.country_code
 		self.version = 0.2
+		self.apk_path = None
+		self.keystore_name = None
 
 
 	def generateKeystore(self):
@@ -91,31 +92,43 @@ class SignApp:
 	def analyze(self):
 		#Check for jarsigner and keystore present or not.
 		pass
+	
 
 if __name__ == "__main__":
     
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "g:s" , ['generate-keystore=' , "sign-apk=" , 'version='])
+        opts, args = getopt.getopt(sys.argv[1:], "g:n:s:" , ['generate-keystore=' , "keystore_name=", "sign-apk=" , 'version'])
         
     except getopt.GetoptError:
         print "python andy.py -g <Keystore_name>"
-        print "python andy.py -s <path_to_apk>"
+        print "python andy.py -n <keystore_name> -s <path_to_apk>"
         sys.exit(2)
-    
+    #print opts
     obj = SignApp()
     for opt, arg in opts:
+		if len(opts) is not 2:
+			print "python andy.py -n <keystore_name> -s <path_to_apk>"
+			sys.exit(2)
+		else:
+			if opt == "-n":
+				if obj.apk_path == None:
+					obj.keystore_name = arg
+				else:
+					obj.keystore_name = arg
+					obj.signIt(obj.apk_path)
+			if opt == "-s":
+				if obj.keystore_name == None:
+					 obj.apk_path = arg
+				else:
+					 obj.apk_path = arg
+					 obj.signIt(obj.apk_path)
+			else:
+				print "python andy.py -n <keystore_name> -s <path_to_apk>"
+				sys.exit(2)
+
         
-        if opt in ('-g' , '--generate-keystore'):
-          	obj.keystore_name = arg
-           	obj.generateKeystore()
-        elif opt in ('-s' , '--sign-apk'):
-            obj.apk_path = arg
-            obj.signIt(obj.apk_path)
-        elif opt in ('--version'):
-            print obj.version
     
-    print 'VERSION   :', obj.version
-   
-	#obj.generateKeystore()
+    
+
     
 
