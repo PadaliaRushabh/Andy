@@ -5,11 +5,12 @@ arapk is very simple automaton script for decompiling, recompiling, generating t
 
 Syntax :
 -------
-
->python arapk.py -g <Keystore_name> #Generate user based keystore name
->python arapk.py -n <keystore_name> -s <path_to_apk> #sign the modified apk using the generated keystore
->python arapk.py -d <path_to_apk_decompile> #decompile the apk file 
->python arapk.py -r <path_to_folder_to_recompile> #recompile the modifed folder back to apk
+```bash
+python arapk.py -g <Keystore_name> #Generate user based keystore name
+python arapk.py -n <keystore_name> -s <path_to_apk> #sign the modified apk using the generated keystore
+python arapk.py -d <path_to_apk_decompile> #decompile the apk file 
+python arapk.py -r <path_to_folder_to_recompile> #recompile the modifed folder back to apk
+```
 
  
 
