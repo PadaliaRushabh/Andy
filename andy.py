@@ -5,11 +5,11 @@
 ############################---------------Its only purpose is to automate the keystore generation and signing the apk. ####
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-@author: Shivang	
+@author: Shivang and Rushabh Padalia
 '''
 
 import subprocess, os
-import sys, pexpect
+import sys, pexpect, getopt
 import config
 
 class SignApp:
@@ -23,6 +23,7 @@ class SignApp:
 		self.city = config.city
 		self.state = config.state
 		self.country_code = config.country_code
+		self.version = 0.2
 
 
 	def generateKeystore(self):
@@ -92,7 +93,29 @@ class SignApp:
 		pass
 
 if __name__ == "__main__":
-	obj = SignApp()
-	obj.generateKeystore()
-	#obj.signIt(sys.argv[1])
+    
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "g:s" , ['generate-keystore=' , "sign-apk=" , 'version='])
+        
+    except getopt.GetoptError:
+        print "python andy.py -g <Keystore_name>"
+        print "python andy.py -s <path_to_apk>"
+        sys.exit(2)
+    
+    obj = SignApp()
+    for opt, arg in opts:
+        
+        if opt in ('-g' , '--generate-keystore'):
+          	obj.keystore_name = arg
+           	obj.generateKeystore()
+        elif opt in ('-s' , '--sign-apk'):
+            obj.apk_path = arg
+            obj.signIt(obj.apk_path)
+        elif opt in ('--version'):
+            print obj.version
+    
+    print 'VERSION   :', obj.version
+   
+	#obj.generateKeystore()
+    
 
