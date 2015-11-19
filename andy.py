@@ -88,7 +88,56 @@ class SignApp:
 			print "Something went wrong during Signing the apk"
 			print "Description: ", e
 		pass
+	
+	def decompile(self, apk_path):
+		apktool_cmd = "java -jar apktool.jar if" + " " + apk_path 
+		print apktool_cmd
+		try:
+			child = pexpect.spawn(apktool_cmd)
+			print child.read()
+			child.delaybeforesend = 2 
+			i = child.expect(['$', '#'])
+			if i==0 or i==1:
+				child.sendline('pwd')		
+			child.close()
 
+		except Exception as e:
+			print "Something went wrong during framework installation"
+			print "Description: ", e
+		pass
+	
+		apktool_cmd = "java -jar apktool.jar d" + " " + apk_path
+		print apktool_cmd
+		try:
+			child = pexpect.spawn(apktool_cmd)
+			print child.read()
+			child.delaybeforesend = 2 
+			i = child.expect(['$', '#'])
+			if i==0 or i==1:
+				child.sendline('pwd')		
+			child.close()
+
+		except Exception as e:
+			print "Something went wrong during decompiling"
+			print "Description: ", e
+		pass
+	
+	def recompile(self, apk_path):
+		apktool_cmd = "java -jar apktool.jar b" + " " + apk_path
+		print apktool_cmd
+		try:
+			child = pexpect.spawn(apktool_cmd)
+			print child.read()
+			child.delaybeforesend = 2 
+			i = child.expect(['$', '#'])
+			if i==0 or i==1:
+				child.sendline('pwd')		
+			child.close()
+
+		except Exception as e:
+			print "Something went wrong during framework installation"
+			print "Description: ", e
+		pass
 	def analyze(self):
 		#Check for jarsigner and keystore present or not.
 		pass
@@ -97,34 +146,48 @@ class SignApp:
 if __name__ == "__main__":
     
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "g:n:s:" , ['generate-keystore=' , "keystore_name=", "sign-apk=" , 'version'])
+        opts, args = getopt.getopt(sys.argv[1:], "g:n:s:d:r:" , ['generate-keystore=' , "keystore-name=", "sign-apk=" , 'decompile=' , 'recompile=',  'version'])
         
     except getopt.GetoptError:
         print "python andy.py -g <Keystore_name>"
         print "python andy.py -n <keystore_name> -s <path_to_apk>"
+        print "python andy.py -d <path_to_apk_decompile>"
+        print "python andy.py -r <path_to_folder_to_recompile>"
         sys.exit(2)
     #print opts
     obj = SignApp()
     for opt, arg in opts:
-		if len(opts) is not 2:
-			print "python andy.py -n <keystore_name> -s <path_to_apk>"
+		print "opt" + opt
+		if opt == "-d":
+			obj.decompile(arg)
 			sys.exit(2)
-		else:
-			if opt == "-n":
-				if obj.apk_path == None:
-					obj.keystore_name = arg
-				else:
-					obj.keystore_name = arg
-					obj.signIt(obj.apk_path)
-			if opt == "-s":
-				if obj.keystore_name == None:
-					 obj.apk_path = arg
-				else:
-					 obj.apk_path = arg
-					 obj.signIt(obj.apk_path)
-			else:
+		if opt == "-r":
+			obj.recompile(arg)
+			sys.exit(2)		
+		if opt == "-n":
+			if len(opts) is not 2:
 				print "python andy.py -n <keystore_name> -s <path_to_apk>"
 				sys.exit(2)
+			elif obj.apk_path == None:
+				obj.keystore_name = arg
+			else:
+				obj.keystore_name = arg
+				obj.signIt(obj.apk_path)
+				sys.exit(2)
+		if opt == "-s":
+			if len(opts) is not 2:
+				print "python andy.py -n <keystore_name> -s <path_to_apk>"
+			elif obj.keystore_name == None:
+				obj.apk_path = arg
+			else:
+				obj.apk_path = arg
+				obj.signIt(obj.apk_path)
+				sys.exit(2)
+		if opt == '-g':
+		    obj.keystore_name = arg
+		    obj.generateKeystore()
+		    sys.exit(2)
+
 
         
     
