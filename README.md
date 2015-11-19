@@ -1,22 +1,21 @@
-# Andy  - Android Keystore and Signing Automator.
+# arapk  - Android Reverse APK.
 
-Andy is very simple automaton script for generating the keystore and signing the APK with that particular keystore.
-This script will be handy to those researchers and security professionals who are much more into reversing.
+arapk is very simple automaton script for decompiling, recompiling, generating the keystore and signing the APK with specified keystore arguments.
+
 
 Syntax :
 -------
->python andy.py : Generates the keystore with Andy's default credentials.
 
-[upcoming] 
->python andy.py -n [keystore-name] #Generate user based keystore name
+>python arapk.py -g <Keystore_name> #Generate user based keystore name
+>python arapk.py -n <keystore_name> -s <path_to_apk> #sign the modified apk using the generated keystore
+>python arapk.py -d <path_to_apk_decompile> #decompile the apk file 
+>python arapk.py -r <path_to_folder_to_recompile> #recompile the modifed folder back to apk
 
->python andy.py -a [apk-path] #Sign the apk using above created keystore
-
-This will save lot of time for security person. 
+ 
 
 Pre-Requisites :
 ---------------
-'jarsigner' and 'keytool' to be present and set appropriately in environment path. [This process will also be automated soon]
+'python 2.7', 'jarsigner', 'keytool' and "apktool.jar" to be present and set appropriately in environment path. [This process will also be automated soon]
 
 [Expect bugs. This is just beta phase]
 [Warning : For educational purpose only]
